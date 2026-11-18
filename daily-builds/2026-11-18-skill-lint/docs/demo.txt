@@ -1,0 +1,31 @@
+================================================================================
+SKILL-LINT REPORT
+================================================================================
+
+
+good-example
+------------
+Score: 95/100 ([32mA[0m)
+Findings: 0 errors, 1 warnings, 0 info
+
+Findings:
+  [[33mWARNING[0m] SL002: Skill name 'good-example' does not match directory name 'good' (line 1)
+
+
+examples/bad/SKILL.md
+---------------------
+Score: 68/100 ([31mD[0m)
+Findings: 2 errors, 0 warnings, 1 info
+
+Findings:
+  [[31mERROR[0m] SL001: Missing YAML frontmatter (should start with --- and end with ---) (line 1)
+  [[31mERROR[0m] SL006: Referenced file does not exist: ./nonexistent-file.md (file)
+  [[36mINFO[0m] SL009: No concrete examples or code blocks found (file)
+
+================================================================================
+SUMMARY
+================================================================================
+Total skills: 2
+Total findings: 4
+Average score: 81.5/100
+
