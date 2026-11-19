@@ -1,7 +1,7 @@
 """Rate and budget limits with token bucket."""
 
-from dataclasses import dataclass, field
-from typing import Callable
+from collections.abc import Callable
+from dataclasses import dataclass
 
 
 @dataclass
@@ -48,7 +48,7 @@ class LimitsManager:
     @staticmethod
     def _default_clock() -> float:
         """Default clock using time.time()."""
-        import time
+        import time  # noqa: PLC0415
 
         return time.time()
 

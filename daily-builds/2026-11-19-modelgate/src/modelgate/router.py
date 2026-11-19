@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 
 from modelgate.catalog import Catalog, Model
-from modelgate.policies import Policy, get_policy
+from modelgate.policies import get_policy
 from modelgate.tokens import Tokenizer
 
 

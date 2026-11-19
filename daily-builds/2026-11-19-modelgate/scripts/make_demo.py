@@ -95,7 +95,8 @@ def _convert_svg_to_png(svg_path: Path, png_path: Path) -> None:
             except Exception:
                 font = ImageFont.load_default()
 
-            draw.text((10, 10), "Modelgate Demo\n\nSee docs/demo.svg for full rendering", fill="black", font=font)
+            text = "Modelgate Demo\n\nSee docs/demo.svg for full rendering"
+            draw.text((10, 10), text, fill="black", font=font)
 
             img.save(png_path)
             print(f"✓ Saved {png_path} (fallback rendering)")

@@ -157,7 +157,8 @@ def format_results_table(results: list[PolicyResult]) -> str:
                 savings = baseline.total_cost - r.total_cost
                 pct = (savings / baseline.total_cost * 100) if baseline.total_cost > 0 else 0
                 lines.append(
-                    f"💰 {r.policy_name} saves ${savings:.6f} ({pct:.1f}%) vs {baseline.policy_name}"
+                    f"💰 {r.policy_name} saves ${savings:.6f} "
+                    f"({pct:.1f}%) vs {baseline.policy_name}"
                 )
 
     return "\n".join(lines)

@@ -26,7 +26,9 @@ class FakeProvider:
         if model_id in self.responses:
             return self.responses[model_id]
 
-        return ProviderResponse(content=f"Response from {model_id}", input_tokens=10, output_tokens=20)
+        return ProviderResponse(
+            content=f"Response from {model_id}", input_tokens=10, output_tokens=20
+        )
 
 
 def make_model(id: str) -> Model:

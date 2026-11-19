@@ -99,5 +99,5 @@ class Executor:
                 timeout=self.timeout,
             )
             return asyncio.run(result)
-        except asyncio.TimeoutError as e:
+        except TimeoutError as e:
             raise TimeoutError(f"Request timeout after {self.timeout}s") from e

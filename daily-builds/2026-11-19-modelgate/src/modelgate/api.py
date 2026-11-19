@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, Header, HTTPException, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from modelgate.breaker import CircuitBreaker
 from modelgate.cache import ResponseCache
@@ -33,7 +33,7 @@ _provider: MockProvider | None = None
 
 def get_components() -> tuple[Catalog, ResponseCache, LimitsManager, Router, Executor]:
     """Lazy-load and return components."""
-    global _catalog, _cache, _limits, _breaker, _router, _executor, _provider
+    global _catalog, _cache, _limits, _breaker, _router, _executor, _provider  # noqa: PLW0603
 
     if _catalog is None:
         cfg = load_config(CONFIG_PATH)
@@ -259,7 +259,9 @@ def chat_completions(
         result = executor.execute(candidates, cache_request)
 
         # Calculate actual cost
-        cost = calculate_cost(result.model, result.response.input_tokens, result.response.output_tokens)
+        cost = calculate_cost(
+            result.model, result.response.input_tokens, result.response.output_tokens
+        )
 
         # Build response
         response_data = {

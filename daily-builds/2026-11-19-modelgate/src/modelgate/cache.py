@@ -3,8 +3,9 @@
 import hashlib
 import json
 from collections import OrderedDict
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any
 
 
 @dataclass
@@ -32,7 +33,7 @@ class ResponseCache:
     @staticmethod
     def _default_clock() -> float:
         """Default clock using time.time()."""
-        import time
+        import time  # noqa: PLC0415
 
         return time.time()
 

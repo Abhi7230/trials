@@ -1,6 +1,5 @@
 """Command-line interface."""
 
-import sys
 from pathlib import Path
 
 import typer
@@ -9,7 +8,6 @@ from rich.table import Table
 
 from modelgate.catalog import Catalog, Model
 from modelgate.config import load_config
-from modelgate.policies import get_policy
 from modelgate.router import NoRouteError, Router, RoutingRequest
 from modelgate.simulate import Simulator, format_results_json, format_results_table
 from modelgate.tokens import SimpleTokenizer
@@ -20,14 +18,14 @@ console = Console()
 
 @app.command()
 def serve(
-    config: Path = typer.Option(Path("models.yaml"), help="Config file"),
-    port: int = typer.Option(8080, help="Port to listen on"),
-    host: str = typer.Option("0.0.0.0", help="Host to bind to"),
+    config: Path = typer.Option(Path("models.yaml"), help="Config file"),  # noqa: B008
+    port: int = typer.Option(8080, help="Port to listen on"),  # noqa: B008
+    host: str = typer.Option("0.0.0.0", help="Host to bind to"),  # noqa: B008
 ) -> None:
     """Start the gateway server."""
-    import uvicorn
+    import uvicorn  # noqa: PLC0415
 
-    from modelgate import api
+    from modelgate import api  # noqa: PLC0415
 
     # Load config to validate
     try:
@@ -44,7 +42,7 @@ def serve(
 
 @app.command()
 def models(
-    config: Path = typer.Option(Path("models.yaml"), help="Config file"),
+    config: Path = typer.Option(Path("models.yaml"), help="Config file"),  # noqa: B008
 ) -> None:
     """List available models."""
     try:
@@ -81,9 +79,9 @@ def models(
 
 @app.command()
 def route(
-    prompt: str = typer.Argument(..., help="Prompt text to route"),
-    config: Path = typer.Option(Path("models.yaml"), help="Config file"),
-    policy: str = typer.Option("balanced", help="Routing policy"),
+    prompt: str = typer.Argument(..., help="Prompt text to route"),  # noqa: B008
+    config: Path = typer.Option(Path("models.yaml"), help="Config file"),  # noqa: B008
+    policy: str = typer.Option("balanced", help="Routing policy"),  # noqa: B008
 ) -> None:
     """Dry-run routing for a prompt."""
     try:
@@ -135,12 +133,12 @@ def route(
 
 @app.command()
 def simulate(
-    trace: Path = typer.Argument(..., help="Trace file (JSONL)"),
-    config: Path = typer.Option(Path("models.yaml"), help="Config file"),
-    policy: list[str] = typer.Option(
+    trace: Path = typer.Argument(..., help="Trace file (JSONL)"),  # noqa: B008
+    config: Path = typer.Option(Path("models.yaml"), help="Config file"),  # noqa: B008
+    policy: list[str] = typer.Option(  # noqa: B008
         ["cheapest", "balanced"], help="Policies to compare (multiple allowed)"
     ),
-    format: str = typer.Option("table", help="Output format: table, json, or svg"),
+    format: str = typer.Option("table", help="Output format: table, json, or svg"),  # noqa: B008
 ) -> None:
     """Simulate trace replay across policies."""
     try:

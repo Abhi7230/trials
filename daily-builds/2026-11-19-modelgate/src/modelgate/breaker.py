@@ -1,8 +1,8 @@
 """Circuit breaker implementation."""
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
-from typing import Callable
 
 
 class BreakerState(Enum):
@@ -39,7 +39,7 @@ class CircuitBreaker:
     @staticmethod
     def _default_clock() -> float:
         """Default clock using time.time()."""
-        import time
+        import time  # noqa: PLC0415
 
         return time.time()
 
