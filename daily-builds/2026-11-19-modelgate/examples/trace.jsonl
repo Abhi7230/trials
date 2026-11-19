@@ -1,0 +1,20 @@
+{"prompt_length": 150, "completion_length": 50, "capabilities": ["json"]}
+{"prompt_length": 2000, "completion_length": 800, "capabilities": ["tools"]}
+{"prompt_length": 500, "completion_length": 200, "capabilities": []}
+{"prompt_length": 5000, "completion_length": 1500, "capabilities": ["tools", "json"]}
+{"prompt_length": 100, "completion_length": 30, "capabilities": []}
+{"prompt_length": 10000, "completion_length": 3000, "capabilities": ["vision"]}
+{"prompt_length": 300, "completion_length": 100, "capabilities": ["json"]}
+{"prompt_length": 1500, "completion_length": 600, "capabilities": ["tools", "json"]}
+{"prompt_length": 250, "completion_length": 80, "capabilities": []}
+{"prompt_length": 8000, "completion_length": 2500, "capabilities": ["tools", "vision"]}
+{"prompt_length": 400, "completion_length": 150, "capabilities": ["json"]}
+{"prompt_length": 3000, "completion_length": 1000, "capabilities": ["tools"]}
+{"prompt_length": 600, "completion_length": 200, "capabilities": []}
+{"prompt_length": 15000, "completion_length": 4000, "capabilities": ["vision", "json"]}
+{"prompt_length": 200, "completion_length": 60, "capabilities": []}
+{"prompt_length": 1000, "completion_length": 350, "capabilities": ["tools"]}
+{"prompt_length": 350, "completion_length": 120, "capabilities": ["json"]}
+{"prompt_length": 4000, "completion_length": 1200, "capabilities": ["tools", "json"]}
+{"prompt_length": 180, "completion_length": 55, "capabilities": []}
+{"prompt_length": 7000, "completion_length": 2000, "capabilities": ["vision"]}

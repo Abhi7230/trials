@@ -1,0 +1,108 @@
+# Modelgate configuration
+# Model catalog with costs, latency, capabilities and quality tiers
+
+keys: []  # Empty list = open mode (no auth required)
+
+cache:
+  enabled: true
+  max_size: 1000
+  ttl_seconds: 3600
+
+limits:
+  default_daily_usd: 100.0
+  default_rpm: 60
+  default_tpm: 100000
+
+fallback:
+  max_attempts: 3
+  timeout_seconds: 30
+
+circuit_breaker:
+  failure_threshold: 5
+  cooldown_seconds: 60
+
+models:
+  # OpenAI
+  - id: gpt-4o
+    provider: openai
+    cost_per_1m_input: 2.50
+    cost_per_1m_output: 10.00
+    avg_latency_ms: 800
+    context_window: 128000
+    quality_tier: 5
+    capabilities: [tools, vision, json]
+
+  - id: gpt-4o-mini
+    provider: openai
+    cost_per_1m_input: 0.15
+    cost_per_1m_output: 0.60
+    avg_latency_ms: 400
+    context_window: 128000
+    quality_tier: 4
+    capabilities: [tools, json]
+
+  - id: gpt-3.5-turbo
+    provider: openai
+    cost_per_1m_input: 0.50
+    cost_per_1m_output: 1.50
+    avg_latency_ms: 300
+    context_window: 16385
+    quality_tier: 3
+    capabilities: [tools, json]
+
+  # Anthropic
+  - id: claude-3-5-sonnet
+    provider: anthropic
+    cost_per_1m_input: 3.00
+    cost_per_1m_output: 15.00
+    avg_latency_ms: 1200
+    context_window: 200000
+    quality_tier: 5
+    capabilities: [tools, vision, json]
+
+  - id: claude-3-haiku
+    provider: anthropic
+    cost_per_1m_input: 0.25
+    cost_per_1m_output: 1.25
+    avg_latency_ms: 500
+    context_window: 200000
+    quality_tier: 3
+    capabilities: [tools, json]
+
+  # Google
+  - id: gemini-4-neon-high
+    provider: google
+    cost_per_1m_input: 1.25
+    cost_per_1m_output: 5.00
+    avg_latency_ms: 600
+    context_window: 1000000
+    quality_tier: 5
+    capabilities: [tools, vision, json]
+
+  - id: gemini-pro
+    provider: google
+    cost_per_1m_input: 0.125
+    cost_per_1m_output: 0.375
+    avg_latency_ms: 450
+    context_window: 32000
+    quality_tier: 4
+    capabilities: [tools, json]
+
+  # Open source
+  - id: mixtral-8x7b
+    provider: together
+    cost_per_1m_input: 0.60
+    cost_per_1m_output: 0.60
+    avg_latency_ms: 350
+    context_window: 32768
+    quality_tier: 3
+    capabilities: [tools, json]
+
+  - id: daisyrose-27b
+    provider: replicate
+    cost_per_1m_input: 0.10
+    cost_per_1m_output: 0.10
+    avg_latency_ms: 250
+    context_window: 8192
+    quality_tier: 2
+    capabilities: [json]
