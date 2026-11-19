@@ -1,10 +1,9 @@
 """Tests for catalog module."""
 
 import pytest
-import yaml
 
 from modelgate.catalog import Catalog, Model
-from modelgate.config import Config, load_config
+from modelgate.config import load_config
 
 
 def test_load_valid_config(tmp_path):

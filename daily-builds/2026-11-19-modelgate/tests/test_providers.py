@@ -1,7 +1,7 @@
 """Tests for provider implementations."""
 
-import pytest
 import httpx
+import pytest
 
 from modelgate.providers.base import ProviderError
 from modelgate.providers.mock import MockProvider

@@ -126,14 +126,28 @@ def test_no_candidates_raises():
 
 def test_auto_with_policy():
     """Test auto:policy syntax."""
-    models = [
-        make_model("expensive", context=10000),
-        make_model("cheap", context=10000),
-    ]
-    models[0].cost_per_1m_input = 10.0
-    models[1].cost_per_1m_input = 0.5
+    expensive = Model(
+        id="expensive",
+        provider="test",
+        cost_per_1m_input=10.0,
+        cost_per_1m_output=20.0,
+        avg_latency_ms=500,
+        context_window=10000,
+        quality_tier=5,
+        capabilities=frozenset(),
+    )
+    cheap = Model(
+        id="cheap",
+        provider="test",
+        cost_per_1m_input=0.5,
+        cost_per_1m_output=1.0,
+        avg_latency_ms=500,
+        context_window=10000,
+        quality_tier=3,
+        capabilities=frozenset(),
+    )
 
-    catalog = Catalog(models)
+    catalog = Catalog([expensive, cheap])
     router = Router(catalog, SimpleTokenizer())
 
     request = RoutingRequest(
@@ -147,14 +161,28 @@ def test_auto_with_policy():
 
 def test_policy_header_override():
     """Test x-modelgate-policy header override."""
-    models = [
-        make_model("slow", context=10000),
-        make_model("fast", context=10000),
-    ]
-    models[0].avg_latency_ms = 1000
-    models[1].avg_latency_ms = 100
+    slow = Model(
+        id="slow",
+        provider="test",
+        cost_per_1m_input=1.0,
+        cost_per_1m_output=2.0,
+        avg_latency_ms=1000,
+        context_window=10000,
+        quality_tier=3,
+        capabilities=frozenset(),
+    )
+    fast = Model(
+        id="fast",
+        provider="test",
+        cost_per_1m_input=1.0,
+        cost_per_1m_output=2.0,
+        avg_latency_ms=100,
+        context_window=10000,
+        quality_tier=3,
+        capabilities=frozenset(),
+    )
 
-    catalog = Catalog(models)
+    catalog = Catalog([slow, fast])
     router = Router(catalog, SimpleTokenizer(), default_policy="cheapest")
 
     request = RoutingRequest(
