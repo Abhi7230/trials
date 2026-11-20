@@ -40,11 +40,14 @@ class LatencyOutlierDetector:
                         )
                     )
 
-        # Check P95
-        if latencies:
+        # Check P95 (only if we have multiple data points)
+        if latencies and len(latencies) > 1:
             sorted_latencies = sorted(latencies)
             p95_idx = int(len(sorted_latencies) * 0.95)
-            p95 = sorted_latencies[p95_idx] if p95_idx < len(sorted_latencies) else sorted_latencies[-1]
+            if p95_idx < len(sorted_latencies):
+                p95 = sorted_latencies[p95_idx]
+            else:
+                p95 = sorted_latencies[-1]
 
             if p95 > p95_limit:
                 instances.append(

@@ -11,9 +11,9 @@ from agentlens.scorer import analyze_trace
 
 app = FastAPI(title="agentlens", version="0.1.0")
 
-# Metrics
-_analysis_count = 0
-_total_score = 0
+# Metrics (using globals for simple in-memory metrics)
+_analysis_count = 0  # noqa: PLW0603
+_total_score = 0  # noqa: PLW0603
 
 
 class AnalyzeRequest(BaseModel):
@@ -47,7 +47,7 @@ class RuleInfo(BaseModel):
 @app.post("/analyze", response_model=AnalysisResult)
 async def analyze(request: AnalyzeRequest) -> AnalysisResult:
     """Analyze a trace."""
-    global _analysis_count, _total_score
+    global _analysis_count, _total_score  # noqa: PLW0603
 
     try:
         # Parse trace events

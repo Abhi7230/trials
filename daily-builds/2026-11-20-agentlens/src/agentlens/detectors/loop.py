@@ -76,21 +76,12 @@ class ToolCallLoopDetector:
                     current_args = [args_str]
                     streak = 1
 
-            elif event.type != "tool_result" or event.tool_call_id != current_tool:
-                # Non-tool-call event that's not the immediate result of current tool
-                # Reset streak
-                if current_tool and streak >= min_streak:
-                    instances.append(
-                        PatternInstance(
-                            pattern_type=self.pattern_type,
-                            severity=self.severity,
-                            deduction=self.deduction,
-                            details={"tool": current_tool, "count": streak},
-                        )
-                    )
-                current_tool = None
-                current_args = []
-                streak = 0
+            elif event.type == "message" or (event.type == "tool_result" and not event.error):
+                # Non-tool-call event that's not an error result - these can break the loop
+                # (Successful tool results are expected and don't break the loop)
+                # But only break if it's not a tool_result at all, or it's a success
+                # We want to allow tool_result errors to continue the loop context
+                pass  # Don't reset on tool_result - let it continue
 
         # Check final streak
         if streak >= min_streak:

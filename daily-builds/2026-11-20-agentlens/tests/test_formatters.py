@@ -12,7 +12,13 @@ def test_cli_contains_score() -> None:
         score=75,
         passed=True,
         patterns=[],
-        stats={"total_turns": 5, "tool_calls": 2, "errors": 0, "cost_usd": 0.01, "duration_ms": 100},
+        stats={
+            "total_turns": 5,
+            "tool_calls": 2,
+            "errors": 0,
+            "cost_usd": 0.01,
+            "duration_ms": 100,
+        },
     )
 
     output = format_cli(result)
@@ -31,10 +37,23 @@ def test_json_has_score_patterns_stats() -> None:
                 "severity": "low",
                 "count": 1,
                 "deduction": 5,
-                "instances": [{"pattern_type": "test-pattern", "severity": "low", "deduction": 5, "details": {}}],
+                "instances": [
+                    {
+                        "pattern_type": "test-pattern",
+                        "severity": "low",
+                        "deduction": 5,
+                        "details": {},
+                    }
+                ],
             }
         ],
-        stats={"total_turns": 3, "tool_calls": 1, "errors": 0, "cost_usd": 0.005, "duration_ms": 50},
+        stats={
+            "total_turns": 3,
+            "tool_calls": 1,
+            "errors": 0,
+            "cost_usd": 0.005,
+            "duration_ms": 50,
+        },
     )
 
     output = format_json(result)
@@ -53,7 +72,13 @@ def test_markdown_has_table_header() -> None:
         score=90,
         passed=True,
         patterns=[],
-        stats={"total_turns": 2, "tool_calls": 0, "errors": 0, "cost_usd": 0.0, "duration_ms": 20},
+        stats={
+            "total_turns": 2,
+            "tool_calls": 0,
+            "errors": 0,
+            "cost_usd": 0.0,
+            "duration_ms": 20,
+        },
     )
 
     output = format_markdown(result)

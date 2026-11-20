@@ -38,12 +38,20 @@ def load_trace(filepath: Path) -> list[TraceEvent]:
             raise ValueError(msg) from e
 
         # Detect schema
-        current_schema = _detect_schema(raw)
+        try:
+            current_schema = _detect_schema(raw)
+        except ValueError as e:
+            # Re-raise with line number
+            msg = f"Line {line_num}: {e}"
+            raise ValueError(msg) from e
 
         if detected_schema is None:
             detected_schema = current_schema
         elif detected_schema != current_schema:
-            msg = f"Mixed schemas detected: {detected_schema} vs {current_schema} at line {line_num}"
+            msg = (
+                f"Mixed schemas detected: {detected_schema} vs "
+                f"{current_schema} at line {line_num}"
+            )
             raise ValueError(msg)
 
         # Parse based on schema

@@ -3,8 +3,6 @@
 import json
 from pathlib import Path
 
-import pytest
-
 from agentlens.detectors.cost_blowup import CostBlowupDetector
 from agentlens.detectors.error_ignored import ErrorIgnoredDetector
 from agentlens.detectors.hallucinated_tool import HallucinatedToolDetector

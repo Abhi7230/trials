@@ -1,6 +1,5 @@
 """Tests for trace loader."""
 
-import json
 from pathlib import Path
 
 import pytest
@@ -61,7 +60,10 @@ def test_mixed_schema_rejected(tmp_path: Path) -> None:
 def test_malformed_json_error(tmp_path: Path) -> None:
     """Test that malformed JSON gives clear error with line number."""
     trace_file = tmp_path / "trace.jsonl"
-    trace_file.write_text('{"valid": true}\n{invalid json\n')
+    trace_file.write_text(
+        '{"timestamp":"t1","type":"message","role":"user","content":"Hi"}\n'
+        '{invalid json\n'
+    )
 
     with pytest.raises(ValueError, match="Invalid JSON at line 2"):
         load_trace(trace_file)

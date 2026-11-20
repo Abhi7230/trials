@@ -1,7 +1,6 @@
 """Output formatters for analysis results."""
 
 import json
-from typing import Any
 
 from rich.console import Console
 from rich.table import Table
@@ -98,9 +97,11 @@ def format_markdown(result: AnalysisResult) -> str:
         )
 
         for pattern in result.patterns:
-            lines.append(
-                f"| {pattern['type']} | {pattern['severity']} | {pattern['count']} | -{pattern['deduction']} |"
-            )
+            p_type = pattern["type"]
+            p_sev = pattern["severity"]
+            p_count = pattern["count"]
+            p_deduct = pattern["deduction"]
+            lines.append(f"| {p_type} | {p_sev} | {p_count} | -{p_deduct} |")
 
         lines.append("")
 

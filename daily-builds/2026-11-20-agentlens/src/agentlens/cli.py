@@ -18,7 +18,7 @@ console = Console()
 
 
 @app.command()
-def analyze(
+def analyze(  # noqa: PLR0917
     trace_file: Annotated[Path, typer.Argument(help="Path to trace JSONL file")],
     format: Annotated[str, typer.Option(help="Output format")] = "cli",
     output: Annotated[Path | None, typer.Option(help="Write output to file")] = None,

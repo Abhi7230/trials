@@ -34,8 +34,8 @@ def get_all_detectors() -> list[type[Detector]]:
     return _DETECTORS.copy()
 
 
-# Import all detectors to trigger registration
-from agentlens.detectors import (
+# Import all detectors to trigger registration  # noqa: E402
+from agentlens.detectors import (  # noqa: E402
     cost_blowup,
     error_ignored,
     hallucinated_tool,
