@@ -1,0 +1,59 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agentlens"
+version = "0.1.0"
+description = "Offline analyzer for AI agent trace reliability with pattern detection, scoring, and CI gates"
+authors = [{name = "Abhi Raj", email = "105153898+Abhi7230@users.noreply.github.com"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "pydantic>=2.0.0",
+    "rich>=13.0.0",
+    "typer>=0.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.0",
+    "cairosvg>=2.7.0",
+    "pillow>=10.0.0",
+]
+
+[project.scripts]
+agentlens = "agentlens.cli:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "PL"]
+ignore = ["PLR0913", "PLR2004", "PLR0911", "PLC0415"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = ["PLW1510", "B017"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "--cov=agentlens --cov-report=term-missing --cov-report=html -q"
+
+[tool.coverage.run]
+source = ["agentlens"]
+omit = ["tests/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "assert False",
+]

@@ -1,0 +1,9 @@
+{
+  "tools": [
+    "check_deployment_status",
+    "deploy_service",
+    "restart_service",
+    "get_weather",
+    "send_notification"
+  ]
+}

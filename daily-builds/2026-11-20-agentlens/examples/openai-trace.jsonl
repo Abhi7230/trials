@@ -1,0 +1,4 @@
+{"role":"user","content":"Check the weather","timestamp":"2026-11-20T10:00:00Z"}
+{"role":"assistant","content":null,"tool_calls":[{"id":"call_abc","type":"function","function":{"name":"get_weather","arguments":"{\"city\":\"San Francisco\"}"}}],"timestamp":"2026-11-20T10:00:01Z"}
+{"role":"tool","tool_call_id":"call_abc","content":"Sunny, 72F","timestamp":"2026-11-20T10:00:02Z"}
+{"role":"assistant","content":"The weather in San Francisco is sunny and 72F","timestamp":"2026-11-20T10:00:03Z"}

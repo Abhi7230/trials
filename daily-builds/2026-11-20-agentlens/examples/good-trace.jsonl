@@ -1,0 +1,6 @@
+{"timestamp":"2026-11-20T10:00:00Z","type":"message","role":"user","content":"Deploy the new service"}
+{"timestamp":"2026-11-20T10:00:01Z","type":"tool_call","role":"assistant","tool_call_id":"call_1","tool_name":"check_deployment_status","tool_args":{"service":"api-v2"},"cost_usd":0.001,"latency_ms":200,"prompt_tokens":50,"completion_tokens":20}
+{"timestamp":"2026-11-20T10:00:02Z","type":"tool_result","role":"tool","tool_call_id":"call_1","content":"Status: ready"}
+{"timestamp":"2026-11-20T10:00:03Z","type":"tool_call","role":"assistant","tool_call_id":"call_2","tool_name":"deploy_service","tool_args":{"service":"api-v2","env":"production"},"cost_usd":0.002,"latency_ms":500,"prompt_tokens":80,"completion_tokens":30}
+{"timestamp":"2026-11-20T10:00:04Z","type":"tool_result","role":"tool","tool_call_id":"call_2","content":"Deployed successfully"}
+{"timestamp":"2026-11-20T10:00:05Z","type":"message","role":"assistant","content":"Deployment completed successfully","cost_usd":0.001,"latency_ms":100,"prompt_tokens":30,"completion_tokens":10}
