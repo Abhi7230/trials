@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp-probe"
+version = "0.1.0"
+description = "Offline conformance & robustness tester for MCP servers"
+authors = [{name = "Abhi Raj", email = "105153898+Abhi7230@users.noreply.github.com"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+    "pydantic>=2.0.0",
+    "jsonschema>=4.20.0",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.23.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-timeout>=2.1.0",
+    "httpx>=0.24.0",
+    "cairosvg>=2.7.0",
+]
+
+[project.scripts]
+mcp-probe = "mcp_probe.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=mcp_probe --cov-report=term-missing --cov-report=html --cov-fail-under=80 -v"
+timeout = 30
