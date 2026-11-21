@@ -47,7 +47,8 @@ def handle_tools_list(request_id, params):
                                 "description": "The message to echo back"
                             }
                         },
-                        "required": ["message"]
+                        "required": ["message"],
+                        "additionalProperties": False
                     }
                 },
                 {
@@ -65,7 +66,8 @@ def handle_tools_list(request_id, params):
                                 "description": "Second number to add"
                             }
                         },
-                        "required": ["a", "b"]
+                        "required": ["a", "b"],
+                        "additionalProperties": False
                     }
                 }
             ]
@@ -88,6 +90,24 @@ def handle_tools_call(request_id, params):
                     "content": [{"type": "text", "text": "Missing required field: message"}]
                 }
             })
+        elif not isinstance(arguments["message"], str):
+            send_response({
+                "jsonrpc": "2.0",
+                "id": request_id,
+                "result": {
+                    "isError": True,
+                    "content": [{"type": "text", "text": "Field 'message' must be a string"}]
+                }
+            })
+        elif set(arguments.keys()) - {"message"}:
+            send_response({
+                "jsonrpc": "2.0",
+                "id": request_id,
+                "result": {
+                    "isError": True,
+                    "content": [{"type": "text", "text": f"Unexpected fields: {list(set(arguments.keys()) - {'message'})}"}]
+                }
+            })
         else:
             send_response({
                 "jsonrpc": "2.0",
@@ -106,9 +126,27 @@ def handle_tools_call(request_id, params):
                     "content": [{"type": "text", "text": "Missing required fields"}]
                 }
             })
+        elif not isinstance(arguments["a"], int) or not isinstance(arguments["b"], int):
+            send_response({
+                "jsonrpc": "2.0",
+                "id": request_id,
+                "result": {
+                    "isError": True,
+                    "content": [{"type": "text", "text": "Fields 'a' and 'b' must be integers"}]
+                }
+            })
+        elif set(arguments.keys()) - {"a", "b"}:
+            send_response({
+                "jsonrpc": "2.0",
+                "id": request_id,
+                "result": {
+                    "isError": True,
+                    "content": [{"type": "text", "text": f"Unexpected fields: {list(set(arguments.keys()) - {'a', 'b'})}"}]
+                }
+            })
         else:
             try:
-                result = int(arguments["a"]) + int(arguments["b"])
+                result = arguments["a"] + arguments["b"]
                 send_response({
                     "jsonrpc": "2.0",
                     "id": request_id,

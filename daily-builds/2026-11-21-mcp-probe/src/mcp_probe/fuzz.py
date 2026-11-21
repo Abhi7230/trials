@@ -62,13 +62,19 @@ class FuzzGenerator:
         
         if properties:
             out_of_range = {}
+            can_generate_out_of_range = False
             for prop_name, prop_schema in list(properties.items())[:1]:
-                out_of_range[prop_name] = self._generate_out_of_range(prop_schema)
-            for prop_name in required:
-                if prop_name not in out_of_range and prop_name in properties:
-                    out_of_range[prop_name] = self._generate_value(properties[prop_name])
-            if out_of_range:
-                results.append(out_of_range)
+                out_of_range_val = self._generate_out_of_range(prop_schema)
+                if out_of_range_val is not None and self._is_truly_out_of_range(prop_schema, out_of_range_val):
+                    out_of_range[prop_name] = out_of_range_val
+                    can_generate_out_of_range = True
+            
+            if can_generate_out_of_range:
+                for prop_name in required:
+                    if prop_name not in out_of_range and prop_name in properties:
+                        out_of_range[prop_name] = self._generate_value(properties[prop_name])
+                if out_of_range:
+                    results.append(out_of_range)
         
         extra_field = {"__extra_unexpected_field__": "should not be here"}
         for prop_name in required:
@@ -83,6 +89,28 @@ class FuzzGenerator:
         results.append(huge_string)
         
         return results[:count]
+    
+    def _is_truly_out_of_range(self, schema: dict[str, Any], value: Any) -> bool:
+        """Check if a value is truly out of range for a schema."""
+        prop_type = schema.get("type", "string")
+        
+        if prop_type == "string" and isinstance(value, str):
+            if "maxLength" in schema and len(value) > schema["maxLength"]:
+                return True
+            if "minLength" in schema and len(value) < schema["minLength"]:
+                return True
+        elif prop_type == "integer" and isinstance(value, int):
+            if "maximum" in schema and value > schema["maximum"]:
+                return True
+            if "minimum" in schema and value < schema["minimum"]:
+                return True
+        elif prop_type == "number" and isinstance(value, (int, float)):
+            if "maximum" in schema and value > schema["maximum"]:
+                return True
+            if "minimum" in schema and value < schema["minimum"]:
+                return True
+        
+        return False
     
     def _generate_value(self, schema: dict[str, Any]) -> Any:
         """Generate a valid value for a property schema."""

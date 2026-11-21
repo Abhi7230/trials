@@ -44,7 +44,7 @@ mcp-probe run --cmd "python my_server.py" --format json --out report.json
 
 ![MCP Probe Demo](docs/demo.png)
 
-The screenshot above shows `mcp-probe` catching multiple issues in a buggy server: invalid tool names, duplicate entries, missing schema fields, and stdout noise.
+The screenshot above shows `mcp-probe` catching 26 issues in a buggy server: invalid tool names, duplicate entries, missing schema fields, stdout noise, and protocol violations. The reference good_server scores 100.0 (Grade A) with zero findings.
 
 ## Architecture
 

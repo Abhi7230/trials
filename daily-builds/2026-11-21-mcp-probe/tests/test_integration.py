@@ -10,7 +10,7 @@ FIXTURES_DIR = Path(__file__).parent.parent / "fixtures"
 
 @pytest.mark.timeout(15)
 def test_good_server_high_score():
-    """Test good server gets high score."""
+    """Test good server gets score >= 95 as required by spec."""
     runner = ProbeRunner(
         cmd=f"{sys.executable} {FIXTURES_DIR / 'good_server.py'}",
         timeout=5.0,
@@ -20,8 +20,8 @@ def test_good_server_high_score():
     
     report = runner.run()
     
-    assert report.score >= 80.0
-    assert report.grade in ["A", "B", "C"]
+    assert report.score >= 95.0, f"good_server must score >= 95, got {report.score}"
+    assert report.grade == "A"
     assert report.stats["tool_count"] == 2
 
 
@@ -82,3 +82,21 @@ def test_report_structure():
     assert "test_count" in report.stats
     assert "latency_p50" in report.stats
     assert "latency_p95" in report.stats
+
+
+@pytest.mark.timeout(15)
+def test_good_server_cli_fail_under():
+    """Test good_server passes --fail-under 80 requirement."""
+    from typer.testing import CliRunner
+    from mcp_probe.cli import app
+    
+    runner = CliRunner()
+    result = runner.invoke(app, [
+        "run",
+        "--cmd", f"{sys.executable} {FIXTURES_DIR / 'good_server.py'}",
+        "--timeout", "5",
+        "--fuzz-per-tool", "4",
+        "--fail-under", "80"
+    ])
+    
+    assert result.exit_code == 0, f"good_server must pass --fail-under 80, got exit code {result.exit_code}"
