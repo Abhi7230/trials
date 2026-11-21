@@ -1,0 +1,4 @@
+{"type": "request", "data": {"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2024-11-05", "capabilities": {}, "clientInfo": {"name": "test", "version": "1.0"}}}}
+{"type": "response", "data": {"jsonrpc": "2.0", "id": 1, "result": {"protocolVersion": "2024-11-05", "capabilities": {"tools": {}}, "serverInfo": {"name": "sample-server", "version": "1.0.0"}}}}
+{"type": "request", "data": {"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}}
+{"type": "response", "data": {"jsonrpc": "2.0", "id": 2, "result": {"tools": [{"name": "echo", "description": "Echoes back the input message", "inputSchema": {"type": "object", "properties": {"message": {"type": "string", "description": "Message to echo"}}, "required": ["message"]}}]}}}
