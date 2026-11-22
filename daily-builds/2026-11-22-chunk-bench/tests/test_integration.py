@@ -36,7 +36,7 @@ def test_markdown_bm25_hit_rate(fixtures_dir):
     )
     
     assert len(results) == 1
-    assert results[0].metrics.hit_at_k >= 0.80
+    assert results[0].metrics.hit_at_k >= 0.85
 
 
 def test_fixed_vs_markdown_comparison(fixtures_dir):
@@ -67,7 +67,12 @@ def test_fixed_vs_markdown_comparison(fixtures_dir):
 
 
 def test_hybrid_mrr_comparison(fixtures_dir):
-    """Test hybrid MRR is reasonable compared to individual retrievers."""
+    """Test hybrid MRR shows benefit of combining retrievers.
+    
+    With improved BM25 tokenization (stemming), BM25 performs much better than
+    the hash-based dense retriever. Hybrid RRF properly combines both, achieving
+    performance between the two individual retrievers, closer to the better one.
+    """
     corpus_dir = fixtures_dir / "corpus"
     questions_file = fixtures_dir / "questions.jsonl"
     
@@ -92,7 +97,10 @@ def test_hybrid_mrr_comparison(fixtures_dir):
     hybrid_mrr = [r for r in results if r.config.retriever == "hybrid"][0].metrics.mrr
     
     min_mrr = min(dense_mrr, bm25_mrr)
+    max_mrr = max(dense_mrr, bm25_mrr)
+    
     assert hybrid_mrr >= min_mrr
+    assert hybrid_mrr <= max_mrr + 0.05
 
 
 def test_sweep_deterministic(fixtures_dir):
