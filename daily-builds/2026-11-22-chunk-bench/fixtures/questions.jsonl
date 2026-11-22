@@ -1,0 +1,30 @@
+{"question": "What data types does Python support?", "gold_doc": "python-basics.md", "gold_substring": "Python supports integers, floats, and complex numbers"}
+{"question": "How do you define a function in Python?", "gold_doc": "python-basics.md", "gold_substring": "Functions are defined using the def keyword"}
+{"question": "What is supervised learning?", "gold_doc": "machine-learning.md", "gold_substring": "supervised learning, the algorithm learns from labeled training data"}
+{"question": "Name some common supervised learning algorithms", "gold_doc": "machine-learning.md", "gold_substring": "Linear Regression"}
+{"question": "What is overfitting in machine learning?", "gold_doc": "machine-learning.md", "gold_substring": "Overfitting occurs when a model learns the training data too well"}
+{"question": "What are the main frontend technologies?", "gold_doc": "web-development.md", "gold_substring": "HTML (HyperText Markup Language) structures web content"}
+{"question": "What is React used for?", "gold_doc": "web-development.md", "gold_substring": "React**: A library for building user interfaces with components"}
+{"question": "What are the HTTP methods used in REST APIs?", "gold_doc": "web-development.md", "gold_substring": "GET: Retrieve resources"}
+{"question": "What is Docker used for?", "gold_doc": "web-development.md", "gold_substring": "Docker containers package applications with dependencies"}
+{"question": "What is data cleaning?", "gold_doc": "data-science.md", "gold_substring": "Data cleaning steps include"}
+{"question": "What are common hypothesis tests?", "gold_doc": "data-science.md", "gold_substring": "T-tests for comparing means"}
+{"question": "What is Apache Spark used for?", "gold_doc": "data-science.md", "gold_substring": "Spark provides fast, in-memory data processing"}
+{"question": "What is IaaS?", "gold_doc": "cloud-computing.md", "gold_substring": "IaaS provides virtualized computing resources over the internet"}
+{"question": "What are the cloud deployment models?", "gold_doc": "cloud-computing.md", "gold_substring": "Public Cloud"}
+{"question": "What is object storage?", "gold_doc": "cloud-computing.md", "gold_substring": "Stores data as objects with metadata and unique identifiers"}
+{"question": "What is Amazon S3?", "gold_doc": "cloud-computing.md", "gold_substring": "Amazon S3 is the most popular object storage service"}
+{"question": "What is time complexity?", "gold_doc": "algorithms.md", "gold_substring": "Time complexity measures how algorithm runtime grows"}
+{"question": "What is the time complexity of binary search?", "gold_doc": "algorithms.md", "gold_substring": "Time complexity: O(log n)"}
+{"question": "What is dynamic programming?", "gold_doc": "algorithms.md", "gold_substring": "Dynamic programming solves problems by breaking them into overlapping subproblems"}
+{"question": "What is a greedy algorithm?", "gold_doc": "algorithms.md", "gold_substring": "Greedy algorithms make locally optimal choices"}
+{"question": "What are the basic SQL operations?", "gold_doc": "databases.md", "gold_substring": "SELECT**: Retrieve data from tables"}
+{"question": "What are ACID properties?", "gold_doc": "databases.md", "gold_substring": "Atomicity**: Transactions complete fully or not at all"}
+{"question": "What are NoSQL database types?", "gold_doc": "databases.md", "gold_substring": "Document Stores"}
+{"question": "What is MongoDB?", "gold_doc": "databases.md", "gold_substring": "MongoDB and CouchDB store data as JSON-like documents"}
+{"question": "What is SQL injection?", "gold_doc": "security.md", "gold_substring": "SQL injection attacks insert malicious SQL code through user inputs"}
+{"question": "How can you prevent XSS attacks?", "gold_doc": "security.md", "gold_substring": "Escape output properly"}
+{"question": "What is symmetric encryption?", "gold_doc": "security.md", "gold_substring": "Same key encrypts and decrypts data"}
+{"question": "What is multi-factor authentication?", "gold_doc": "security.md", "gold_substring": "Combines multiple verification methods"}
+{"question": "What is a firewall?", "gold_doc": "security.md", "gold_substring": "Firewalls filter network traffic based on rules"}
+{"question": "What are common security best practices?", "gold_doc": "security.md", "gold_substring": "Keep software updated"}

@@ -1,0 +1,20 @@
+{
+  "config": {
+    "strategy": "markdown",
+    "size": 128,
+    "overlap": 0,
+    "retriever": "bm25",
+    "k": 3,
+    "seed": 1
+  },
+  "metrics": {
+    "hit_at_k": 0.75,
+    "mrr": 0.68,
+    "recall_at_k": 0.75,
+    "context_precision": 0.42,
+    "avg_tokens_retrieved": 220.0,
+    "chunk_count": 150,
+    "index_size_bytes": 50000,
+    "redundancy": 0.05
+  }
+}
