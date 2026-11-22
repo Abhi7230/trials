@@ -201,6 +201,15 @@ jobs:
 └─────────────┘
 ```
 
+## Tokenization and Retrieval
+
+The benchmark uses improved tokenization with:
+- Lowercase normalization
+- Punctuation removal
+- Basic stemming (plural→singular, past tense→base form)
+
+This ensures consistent matching between queries like "function" and text containing "functions" or "defined" matching "define".
+
 ## Plugging a Real Embedder
 
 Replace `HashEmbedder` with your production model:
