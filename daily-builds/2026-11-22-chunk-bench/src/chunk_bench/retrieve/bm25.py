@@ -3,6 +3,7 @@
 import math
 from collections import Counter, defaultdict
 from ..models import Chunk, RetrievalResult
+from ..tokenize import tokenize_for_retrieval
 
 
 class BM25Retriever:
@@ -25,7 +26,7 @@ class BM25Retriever:
         self.doc_freqs = defaultdict(int)
         
         for chunk in chunks:
-            tokens = chunk.text.lower().split()
+            tokens = tokenize_for_retrieval(chunk.text)
             self.doc_lengths.append(len(tokens))
             term_freqs = Counter(tokens)
             self.doc_term_freqs.append(term_freqs)
@@ -40,7 +41,7 @@ class BM25Retriever:
         if not self.chunks:
             return RetrievalResult(chunks=[], scores=[])
         
-        query_tokens = query.lower().split()
+        query_tokens = tokenize_for_retrieval(query)
         scores = []
         
         for idx, chunk in enumerate(self.chunks):

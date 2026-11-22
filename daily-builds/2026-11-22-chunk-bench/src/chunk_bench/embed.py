@@ -2,6 +2,7 @@
 
 import hashlib
 import numpy as np
+import string
 
 
 class HashEmbedder:
@@ -15,7 +16,10 @@ class HashEmbedder:
     def embed(self, text: str) -> np.ndarray:
         """Embed text to a vector using hashing trick."""
         vec = np.zeros(self.dim)
-        tokens = text.lower().split()
+        text = text.lower()
+        translator = str.maketrans('', '', string.punctuation)
+        text = text.translate(translator)
+        tokens = text.split()
         
         for token in tokens:
             hash_val = int(hashlib.md5(
