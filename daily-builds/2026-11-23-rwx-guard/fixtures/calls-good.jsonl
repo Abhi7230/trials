@@ -1,0 +1,10 @@
+{"ts":1700000000000,"agent":"coder","tool":"read_file","args":{"path":"src/index.ts"}}
+{"ts":1700000001000,"agent":"coder","tool":"read_file","args":{"path":"src/engine.ts"}}
+{"ts":1700000002000,"agent":"coder","tool":"list_files","args":{"path":"src/"}}
+{"ts":1700000003000,"agent":"coder","tool":"read_file","args":{"path":"src/policy/schema.ts"}}
+{"ts":1700000004000,"agent":"coder","tool":"read_file","args":{"path":"src/levels.ts"}}
+{"ts":1700000005000,"agent":"coder","tool":"list_files","args":{"path":"src/match/"}}
+{"ts":1700000006000,"agent":"coder","tool":"read_file","args":{"path":"src/match/glob.ts"}}
+{"ts":1700000007000,"agent":"coder","tool":"read_file","args":{"path":"src/match/path.ts"}}
+{"ts":1700000008000,"agent":"coder","tool":"read_file","args":{"path":"src/cli.ts"}}
+{"ts":1700000009000,"agent":"coder","tool":"read_file","args":{"path":"src/middleware.ts"}}

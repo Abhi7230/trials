@@ -1,0 +1,3 @@
+version: 1
+defaultLevel: invalid_level
+defaultDecision: allow

@@ -1,0 +1,116 @@
+version: 1
+defaultLevel: zero
+defaultDecision: deny
+strict: true
+
+tools:
+  read_file: { level: read }
+  list_files: { level: read }
+  write_file: { level: write }
+  shell: { level: execute }
+  fetch_url: { level: execute }
+
+rules:
+  - id: allow-read-src
+    match:
+      tool: read_file
+      args:
+        - type: path
+          pattern: 'src/**'
+    decision: allow
+    reason: Reading from src/ is allowed
+
+  - id: allow-list-src
+    match:
+      tool: list_files
+      args:
+        - type: path
+          pattern: 'src/**'
+    decision: allow
+    reason: Listing src/ is allowed
+
+  - id: deny-env-files
+    match:
+      args:
+        - type: path
+          pattern: '**/.env*'
+    decision: deny
+    reason: Environment files are forbidden
+
+  - id: deny-ssh-keys
+    match:
+      args:
+        - type: path
+          pattern: '**/.ssh/*'
+    decision: deny
+    reason: SSH keys are forbidden
+
+  - id: deny-private-keys
+    match:
+      args:
+        - type: path
+          pattern: '**/id_rsa*'
+    decision: deny
+    reason: Private keys are forbidden
+
+  - id: deny-rm-rf
+    match:
+      tool: shell
+      args:
+        - type: command
+          denyPatterns:
+            - 'rm -rf /'
+            - 'rm*-rf*/'
+    decision: deny
+    reason: Destructive rm commands are blocked
+
+  - id: deny-curl-pipe
+    match:
+      tool: shell
+      args:
+        - type: command
+          denyPatterns:
+            - 'curl*|*sh'
+            - '*|*bash'
+    decision: deny
+    reason: Piping to shell is dangerous
+
+  - id: deny-sudo
+    match:
+      tool: shell
+      args:
+        - type: command
+          denyPatterns:
+            - 'sudo*'
+    decision: deny
+    reason: Sudo is not allowed
+
+  - id: deny-metadata-service
+    match:
+      args:
+        - type: host
+          deny:
+            - '169.254.169.254'
+    decision: deny
+    reason: AWS metadata service is blocked
+
+  - id: deny-private-ips
+    match:
+      args:
+        - type: host
+          deny:
+            - '10.0.0.0/8'
+            - '172.16.0.0/12'
+            - '192.168.0.0/16'
+            - '127.0.0.1'
+    decision: deny
+    reason: Private IP ranges are blocked
+
+  - id: deny-credentials-url
+    match:
+      args:
+        - type: host
+          deny:
+            - '*@*'
+    decision: deny
+    reason: URLs with credentials are forbidden

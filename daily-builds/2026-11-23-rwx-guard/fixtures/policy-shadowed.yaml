@@ -1,0 +1,16 @@
+version: 1
+defaultLevel: read
+defaultDecision: deny
+
+rules:
+  - id: allow-all
+    match:
+      tool: '*'
+    decision: allow
+    reason: Allow all tools
+
+  - id: deny-write
+    match:
+      tool: 'write_*'
+    decision: deny
+    reason: This rule is shadowed by allow-all and will never match
