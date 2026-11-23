@@ -1,0 +1,49 @@
+version: 1
+defaultLevel: execute
+defaultDecision: allow
+strict: false
+
+tools:
+  shell: { level: execute }
+  exec: { level: execute }
+  write_*: { level: write }
+  delete_*: { level: write }
+  read_*: { level: read }
+  list_*: { level: read }
+
+rules:
+  - id: deny-dangerous-paths
+    match:
+      args:
+        - type: path
+          pattern: '**/.env*'
+        - type: path
+          pattern: '**/.ssh/*'
+        - type: path
+          pattern: '**/id_rsa*'
+    decision: deny
+    reason: Sensitive files are protected
+
+  - id: deny-dangerous-commands
+    match:
+      tool: shell
+      args:
+        - type: command
+          denyPatterns:
+            - 'rm -rf /'
+            - 'curl*|*sh'
+            - 'sudo*'
+    decision: deny
+    reason: Dangerous commands are blocked
+
+  - id: deny-metadata-ip
+    match:
+      args:
+        - type: host
+          deny:
+            - '169.254.169.254'
+            - '10.0.0.0/8'
+            - '172.16.0.0/12'
+            - '192.168.0.0/16'
+    decision: deny
+    reason: Internal/metadata IPs are blocked

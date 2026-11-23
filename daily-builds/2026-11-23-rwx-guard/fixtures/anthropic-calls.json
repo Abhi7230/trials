@@ -1,0 +1,29 @@
+[
+  {
+    "timestamp": 1700000000000,
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_1",
+        "name": "read_file",
+        "input": {
+          "path": "src/index.ts"
+        }
+      }
+    ]
+  },
+  {
+    "timestamp": 1700000001000,
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_2",
+        "name": "write_file",
+        "input": {
+          "path": "output.txt",
+          "content": "hello"
+        }
+      }
+    ]
+  }
+]
