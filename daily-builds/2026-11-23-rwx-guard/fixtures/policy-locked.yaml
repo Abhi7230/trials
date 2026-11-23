@@ -53,6 +53,16 @@ rules:
     decision: deny
     reason: Private keys are forbidden
 
+  - id: deny-sudo
+    match:
+      tool: shell
+      args:
+        - type: command
+          denyPatterns:
+            - 'sudo*'
+    decision: deny
+    reason: Sudo is not allowed
+
   - id: deny-rm-rf
     match:
       tool: shell
@@ -60,7 +70,7 @@ rules:
         - type: command
           denyPatterns:
             - 'rm -rf /'
-            - 'rm*-rf*/'
+            - 'rm*-rf*'
     decision: deny
     reason: Destructive rm commands are blocked
 
@@ -71,19 +81,19 @@ rules:
         - type: command
           denyPatterns:
             - 'curl*|*sh'
+            - 'wget*|*sh'
             - '*|*bash'
     decision: deny
     reason: Piping to shell is dangerous
 
-  - id: deny-sudo
+  - id: deny-credentials-url
     match:
-      tool: shell
       args:
-        - type: command
-          denyPatterns:
-            - 'sudo*'
+        - type: host
+          deny:
+            - '*@*'
     decision: deny
-    reason: Sudo is not allowed
+    reason: URLs with credentials are forbidden
 
   - id: deny-metadata-service
     match:
@@ -105,12 +115,3 @@ rules:
             - '127.0.0.1'
     decision: deny
     reason: Private IP ranges are blocked
-
-  - id: deny-credentials-url
-    match:
-      args:
-        - type: host
-          deny:
-            - '*@*'
-    decision: deny
-    reason: URLs with credentials are forbidden
