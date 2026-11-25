@@ -3,15 +3,23 @@
 import pytest
 
 from agent_ledger.errors import InsufficientFundsError
+from agent_ledger.ledger import Ledger
 
 
-def test_create_journal_entry_balanced(app, clock):
+def test_create_journal_entry_balanced(conn, clock):
     """Test creating balanced journal entry."""
-    ledger = app.state.ledger
+    ledger = Ledger(conn)
     
     # Create wallets
     ledger.create_wallet("alice", "USD", clock.now())
     ledger.create_wallet("bob", "USD", clock.now())
+    
+    # Give alice some money first
+    ledger.create_journal_entry(
+        "deposit",
+        [("external:funding", -1000), ("alice", 1000)],
+        clock.now(),
+    )
     
     # Create balanced entry
     entry_id = ledger.create_journal_entry(
@@ -23,9 +31,9 @@ def test_create_journal_entry_balanced(app, clock):
     assert entry_id > 0
 
 
-def test_create_journal_entry_unbalanced_rejected(app, clock):
+def test_create_journal_entry_unbalanced_rejected(conn, clock):
     """Test unbalanced entry is rejected."""
-    ledger = app.state.ledger
+    ledger = Ledger(conn)
     
     ledger.create_wallet("alice", "USD", clock.now())
     ledger.create_wallet("bob", "USD", clock.now())
@@ -38,9 +46,9 @@ def test_create_journal_entry_unbalanced_rejected(app, clock):
         )
 
 
-def test_wallet_balance_cannot_go_negative(app, clock):
+def test_wallet_balance_cannot_go_negative(conn, clock):
     """Test wallet balance cannot go negative."""
-    ledger = app.state.ledger
+    ledger = Ledger(conn)
     
     ledger.create_wallet("alice", "USD", clock.now())
     ledger.create_wallet("bob", "USD", clock.now())
@@ -53,9 +61,9 @@ def test_wallet_balance_cannot_go_negative(app, clock):
         )
 
 
-def test_system_accounts_can_go_negative(app, clock):
+def test_system_accounts_can_go_negative(conn, clock):
     """Test system accounts can have negative balance."""
-    ledger = app.state.ledger
+    ledger = Ledger(conn)
     
     ledger.create_wallet("alice", "USD", clock.now())
     
@@ -71,9 +79,9 @@ def test_system_accounts_can_go_negative(app, clock):
     assert ledger.get_balance("alice") == 1000
 
 
-def test_get_balance(app, clock):
+def test_get_balance(conn, clock):
     """Test getting account balance."""
-    ledger = app.state.ledger
+    ledger = Ledger(conn)
     
     ledger.create_wallet("alice", "USD", clock.now())
     
@@ -90,9 +98,9 @@ def test_get_balance(app, clock):
     assert ledger.get_balance("alice") == 1000
 
 
-def test_cached_balance_updated(app, clock):
+def test_cached_balance_updated(conn, clock):
     """Test cached balance is updated correctly."""
-    ledger = app.state.ledger
+    ledger = Ledger(conn)
     
     ledger.create_wallet("alice", "USD", clock.now())
     

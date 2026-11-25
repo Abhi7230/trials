@@ -69,8 +69,6 @@ async def ledger_error_handler(request: Request, exc: LedgerError) -> JSONRespon
         status_code = status.HTTP_400_BAD_REQUEST
     elif exc.reason in ["token_invalid", "token_expired", "token_used", "token_mismatch"]:
         status_code = status.HTTP_403_FORBIDDEN
-    elif exc.reason == "currency_mismatch":
-        status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
     
     return JSONResponse(
         status_code=status_code,

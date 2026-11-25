@@ -126,7 +126,8 @@ class RequestManager:
         return {
             "id": row[0],
             "from_wallet": row[1],
-            "to": row[2],
+            "to_wallet": row[2],
+            "to": row[2],  # Include both for compatibility
             "amount_cents": row[3],
             "memo": row[4],
             "status": row[5],

@@ -26,8 +26,9 @@ def secret():
 @pytest.fixture
 def db_path():
     """Temporary database file."""
-    with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
-        yield f.name
+    f = tempfile.NamedTemporaryFile(suffix=".db", delete=False)
+    f.close()
+    yield f.name
 
 
 @pytest.fixture
@@ -41,7 +42,7 @@ def client(app):
     """HTTP client for testing."""
     with TestClient(app) as c:
         yield c
-        # Check invariants before closing
+        # Check invariants after test
         if hasattr(app.state, "invariants"):
             checker = app.state.invariants
             result = checker.check_all()
@@ -51,4 +52,8 @@ def client(app):
 @pytest.fixture
 def conn(db_path):
     """Database connection for direct testing."""
-    return get_connection(db_path)
+    from agent_ledger.db import init_db
+    c = get_connection(db_path)
+    init_db(c)
+    yield c
+    c.close()
