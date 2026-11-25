@@ -1,0 +1,58 @@
+steps:
+  # Create wallets
+  - method: POST
+    path: /v1/wallets
+    data:
+      id: alice
+      currency: USD
+  
+  - method: POST
+    path: /v1/wallets
+    data:
+      id: bob
+      currency: USD
+  
+  - method: POST
+    path: /v1/wallets
+    data:
+      id: chen
+      currency: USD
+  
+  - method: POST
+    path: /v1/wallets
+    data:
+      id: dev
+      currency: USD
+  
+  # Alice deposits money
+  - method: POST
+    path: /v1/wallets/alice/deposits
+    headers:
+      Idempotency-Key: deposit-alice-1
+    data:
+      amount_cents: 100000
+      memo: Initial deposit
+  
+  # Split the bill
+  # Items: alice 4200, bob 3850, chen 5100, dev 2975, shared appetizer 1800
+  # Tax: 8.875%, Tip: 18% on pre-tax
+  - method: POST
+    path: /v1/splits
+    data:
+      payer: alice
+      participants: [alice, bob, chen, dev]
+      items:
+        - owner: alice
+          amount_cents: 4200
+        - owner: bob
+          amount_cents: 3850
+        - owner: chen
+          amount_cents: 5100
+        - owner: dev
+          amount_cents: 2975
+        - amount_cents: 1800  # shared
+      tax_rate: 0.08875
+      tip_rate: 0.18
+      tip_base: pre_tax
+    expect:
+      status: 201

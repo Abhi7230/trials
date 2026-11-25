@@ -1,0 +1,41 @@
+steps:
+  # Create wallet
+  - method: POST
+    path: /v1/wallets
+    data:
+      id: alice
+      currency: USD
+  
+  # Deposit
+  - method: POST
+    path: /v1/wallets/alice/deposits
+    headers:
+      Idempotency-Key: deposit-1
+    data:
+      amount_cents: 10000
+  
+  # Same transfer with same key (simulated retry)
+  - method: POST
+    path: /v1/wallets
+    data:
+      id: bob
+      currency: USD
+  
+  - method: POST
+    path: /v1/transfers
+    headers:
+      Idempotency-Key: tx-retry-1
+    data:
+      from: alice
+      to: bob
+      amount_cents: 1000
+  
+  # Retry with same key (should be replayed)
+  - method: POST
+    path: /v1/transfers
+    headers:
+      Idempotency-Key: tx-retry-1
+    data:
+      from: alice
+      to: bob
+      amount_cents: 1000

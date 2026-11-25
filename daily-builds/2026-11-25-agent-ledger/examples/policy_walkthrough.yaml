@@ -1,0 +1,107 @@
+steps:
+  # Setup: Create wallets
+  - method: POST
+    path: /v1/wallets
+    data:
+      id: alice
+      currency: USD
+  
+  - method: POST
+    path: /v1/wallets
+    data:
+      id: bob
+      currency: USD
+  
+  - method: POST
+    path: /v1/wallets
+    data:
+      id: erin
+      currency: USD
+  
+  - method: POST
+    path: /v1/wallets
+    data:
+      id: chen
+      currency: USD
+  
+  # Alice deposits 50000
+  - method: POST
+    path: /v1/wallets/alice/deposits
+    headers:
+      Idempotency-Key: deposit-alice-1
+    data:
+      amount_cents: 50000
+  
+  # Set alice policy
+  - method: PUT
+    path: /v1/wallets/alice/policy
+    data:
+      per_tx_cap_cents: 10000
+      daily_cap_cents: 25000
+      auto_approve_limit_cents: 2500
+      trusted_contacts: [bob]
+  
+  # Step 1: Pay bob 2000 → completed
+  - method: POST
+    path: /v1/transfers
+    headers:
+      Idempotency-Key: tx-1
+    data:
+      from: alice
+      to: bob
+      amount_cents: 2000
+      memo: Payment 1
+    expect:
+      status: 201
+  
+  # Step 2: Pay bob 2500 → completed
+  - method: POST
+    path: /v1/transfers
+    headers:
+      Idempotency-Key: tx-2
+    data:
+      from: alice
+      to: bob
+      amount_cents: 2500
+      memo: Payment 2
+    expect:
+      status: 201
+  
+  # Step 3: Pay bob 2501 → pending_approval
+  - method: POST
+    path: /v1/transfers
+    headers:
+      Idempotency-Key: tx-3
+    data:
+      from: alice
+      to: bob
+      amount_cents: 2501
+      memo: Payment 3
+    expect:
+      status: 201
+  
+  # Step 4: Pay erin 10000 → pending_approval
+  - method: POST
+    path: /v1/transfers
+    headers:
+      Idempotency-Key: tx-4
+    data:
+      from: alice
+      to: erin
+      amount_cents: 10000
+      memo: Payment 4
+    expect:
+      status: 201
+  
+  # Step 5: Pay erin 10001 → rejected/per_tx_cap
+  - method: POST
+    path: /v1/transfers
+    headers:
+      Idempotency-Key: tx-5
+    data:
+      from: alice
+      to: erin
+      amount_cents: 10001
+      memo: Payment 5
+    expect:
+      status: 409
