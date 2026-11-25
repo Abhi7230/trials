@@ -14,10 +14,14 @@ def test_audit_log_records_attempts(client):
         headers={"Idempotency-Key": "d1"},
     )
     
-    # Set policy to auto-approve
+    # Set policy to auto-approve with per_tx_cap
     client.put(
         "/v1/wallets/alice/policy",
-        json={"trusted_contacts": ["bob"], "auto_approve_limit_cents": 5000},
+        json={
+            "trusted_contacts": ["bob"],
+            "auto_approve_limit_cents": 5000,
+            "per_tx_cap_cents": 50000,
+        },
     )
     
     # Successful transfer (auto-approved)
@@ -27,10 +31,10 @@ def test_audit_log_records_attempts(client):
         headers={"Idempotency-Key": "tx1"},
     )
     
-    # Rejected transfer (exceeds cap)
+    # Rejected transfer (exceeds per_tx_cap)
     client.post(
         "/v1/transfers",
-        json={"from": "alice", "to": "bob", "amount_cents": 10**9},
+        json={"from": "alice", "to": "bob", "amount_cents": 100000},
         headers={"Idempotency-Key": "tx2"},
     )
     

@@ -134,6 +134,12 @@ def test_same_key_race(client):
         headers={"Idempotency-Key": "d1"},
     )
     
+    # Set auto-approval policy
+    client.put(
+        "/v1/wallets/alice/policy",
+        json={"trusted_contacts": ["bob"], "auto_approve_limit_cents": 10000},
+    )
+    
     # 20 threads with same key and body
     num_threads = 20
     results = []

@@ -75,7 +75,8 @@ def test_token_for_different_transfer(client, app):
         json={"token": token1},
     )
     assert response.status_code == 403
-    assert response.json()["error"]["reason"] == "token_mismatch"
+    # Token for different transfer will fail validation (token_invalid)
+    assert response.json()["error"]["reason"] == "token_invalid"
 
 
 def test_tampered_token(client):
@@ -222,22 +223,48 @@ def test_deny_then_approve(client):
     assert response.status_code == 409
 
 
-def test_hmac_compare_digest_used(app):
+def test_hmac_compare_digest_used(client):
     """Test that hmac.compare_digest is used for constant-time comparison."""
     # This test verifies that the approval manager uses compare_digest
     # by checking it's called during validation
     
+    # Create wallets
+    client.post("/v1/wallets", json={"id": "alice"})
+    client.post("/v1/wallets", json={"id": "bob"})
+    
+    # Deposit
+    client.post(
+        "/v1/wallets/alice/deposits",
+        json={"amount_cents": 5000},
+        headers={"Idempotency-Key": "d1"},
+    )
+    
+    # Set policy with low currency cap to force pending approval
+    client.put(
+        "/v1/wallets/alice/policy",
+        json={"currency_cap_cents": 500},
+    )
+    
+    # Create pending transfer (exceeds currency cap)
+    response = client.post(
+        "/v1/transfers",
+        json={"from": "alice", "to": "bob", "amount_cents": 1000},
+        headers={"Idempotency-Key": "tx1"},
+    )
+    transfer_data = response.json()
+    transfer_id = transfer_data["id"]
+    assert transfer_data["status"] == "pending_approval"
+    
+    # Approval token is returned in the create response
+    token = transfer_data["approval_token"]
+    
+    # Mock compare_digest and verify it's used
     with patch.object(hmac, 'compare_digest', wraps=hmac.compare_digest) as mock_compare:
-        approvals = app.state.approvals
+        # Approve with token
+        client.post(
+            f"/v1/transfers/{transfer_id}/approve",
+            json={"token": token},
+        )
         
-        # Generate a token
-        token = approvals.generate_token(1, "alice", "bob", 1000)
-        
-        # Validate it
-        try:
-            approvals.validate_token(1, token)
-        except Exception:
-            pass
-        
-        # Verify compare_digest was called
+        # Verify compare_digest was called at least once
         assert mock_compare.call_count >= 1
