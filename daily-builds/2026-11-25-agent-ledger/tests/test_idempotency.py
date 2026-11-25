@@ -14,6 +14,12 @@ def test_idempotency_replay(client):
         headers={"Idempotency-Key": "d1"},
     )
     
+    # Set policy to auto-approve
+    client.put(
+        "/v1/wallets/alice/policy",
+        json={"trusted_contacts": ["bob"], "auto_approve_limit_cents": 5000},
+    )
+    
     # First request
     response1 = client.post(
         "/v1/transfers",
@@ -21,6 +27,7 @@ def test_idempotency_replay(client):
         headers={"Idempotency-Key": "tx1"},
     )
     assert response1.status_code == 201
+    assert response1.json()["status"] == "completed"
     transfer_id_1 = response1.json()["id"]
     
     # Same request again - should replay
@@ -47,6 +54,12 @@ def test_idempotency_replay_multiple_times(client):
         "/v1/wallets/alice/deposits",
         json={"amount_cents": 10000},
         headers={"Idempotency-Key": "d1"},
+    )
+    
+    # Set policy to auto-approve
+    client.put(
+        "/v1/wallets/alice/policy",
+        json={"trusted_contacts": ["bob"], "auto_approve_limit_cents": 5000},
     )
     
     # Make same request 5 times
@@ -124,6 +137,12 @@ def test_idempotency_policy_rejection_replay(client):
         "/v1/wallets/alice/deposits",
         json={"amount_cents": 1000},
         headers={"Idempotency-Key": "d1"},
+    )
+    
+    # Set policy to auto-approve so insufficient funds is checked immediately
+    client.put(
+        "/v1/wallets/alice/policy",
+        json={"trusted_contacts": ["bob"], "auto_approve_limit_cents": 50000},
     )
     
     # Request that will be rejected

@@ -14,14 +14,20 @@ def test_audit_log_records_attempts(client):
         headers={"Idempotency-Key": "d1"},
     )
     
-    # Successful transfer
+    # Set policy to auto-approve
+    client.put(
+        "/v1/wallets/alice/policy",
+        json={"trusted_contacts": ["bob"], "auto_approve_limit_cents": 5000},
+    )
+    
+    # Successful transfer (auto-approved)
     client.post(
         "/v1/transfers",
         json={"from": "alice", "to": "bob", "amount_cents": 1000},
         headers={"Idempotency-Key": "tx1"},
     )
     
-    # Rejected transfer
+    # Rejected transfer (exceeds cap)
     client.post(
         "/v1/transfers",
         json={"from": "alice", "to": "bob", "amount_cents": 10**9},
@@ -52,6 +58,12 @@ def test_audit_log_includes_rejected_attempts(client):
         headers={"Idempotency-Key": "d1"},
     )
     
+    # Set policy to auto-approve so rejection happens immediately
+    client.put(
+        "/v1/wallets/alice/policy",
+        json={"trusted_contacts": ["bob"], "auto_approve_limit_cents": 50000},
+    )
+    
     # This will be rejected due to insufficient funds
     client.post(
         "/v1/transfers",
@@ -75,6 +87,12 @@ def test_audit_survives_rollback(client, app):
         "/v1/wallets/alice/deposits",
         json={"amount_cents": 1000},
         headers={"Idempotency-Key": "d1"},
+    )
+    
+    # Set policy to auto-approve so rejection happens immediately
+    client.put(
+        "/v1/wallets/alice/policy",
+        json={"trusted_contacts": ["bob"], "auto_approve_limit_cents": 50000},
     )
     
     # This will fail

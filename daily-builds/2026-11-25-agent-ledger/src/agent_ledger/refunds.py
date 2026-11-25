@@ -48,13 +48,14 @@ class RefundManager:
             (transfer_id,),
         ).fetchone()[0]
 
+        # Check if already fully refunded
+        if total_refunded == original_amount:
+            raise TransferError("fully_refunded", "Transfer fully refunded")
+
         # Check if refund would exceed original amount
         if total_refunded + amount_cents > original_amount:
             remaining = original_amount - total_refunded
             raise TransferError("exceeds_refundable", f"Only {remaining} cents refundable")
-
-        if total_refunded == original_amount:
-            raise TransferError("fully_refunded", "Transfer fully refunded")
 
         # Create refund journal entry
         now = self.clock.now()

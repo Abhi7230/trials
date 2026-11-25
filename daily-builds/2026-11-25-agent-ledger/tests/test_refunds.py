@@ -14,13 +14,20 @@ def test_partial_refunds(client):
         headers={"Idempotency-Key": "d1"},
     )
     
-    # Create transfer
+    # Set policy to auto-approve
+    client.put(
+        "/v1/wallets/alice/policy",
+        json={"trusted_contacts": ["bob"], "auto_approve_limit_cents": 10000},
+    )
+    
+    # Create transfer (should auto-complete)
     response = client.post(
         "/v1/transfers",
         json={"from": "alice", "to": "bob", "amount_cents": 5000},
         headers={"Idempotency-Key": "tx1"},
     )
     transfer_id = response.json()["id"]
+    assert response.json()["status"] == "completed", f"Transfer should be completed, got {response.json()['status']}"
     
     # Refund 3000 - ok
     response = client.post(
@@ -71,12 +78,19 @@ def test_full_reverse_after_partial_refund(client):
         headers={"Idempotency-Key": "d1"},
     )
     
+    # Set policy to auto-approve
+    client.put(
+        "/v1/wallets/alice/policy",
+        json={"trusted_contacts": ["bob"], "auto_approve_limit_cents": 10000},
+    )
+    
     response = client.post(
         "/v1/transfers",
         json={"from": "alice", "to": "bob", "amount_cents": 5000},
         headers={"Idempotency-Key": "tx1"},
     )
     transfer_id = response.json()["id"]
+    assert response.json()["status"] == "completed"
     
     # Partial refund
     client.post(
@@ -101,12 +115,19 @@ def test_reversal_window(client, clock):
         headers={"Idempotency-Key": "d1"},
     )
     
+    # Set policy to auto-approve
+    client.put(
+        "/v1/wallets/alice/policy",
+        json={"trusted_contacts": ["bob"], "auto_approve_limit_cents": 10000},
+    )
+    
     response = client.post(
         "/v1/transfers",
         json={"from": "alice", "to": "bob", "amount_cents": 5000},
         headers={"Idempotency-Key": "tx1"},
     )
     transfer_id = response.json()["id"]
+    assert response.json()["status"] == "completed"
     
     # Advance exactly 72 hours - should still work
     clock.advance(hours=72)
@@ -141,12 +162,19 @@ def test_double_reversal(client):
         headers={"Idempotency-Key": "d1"},
     )
     
+    # Set policy to auto-approve
+    client.put(
+        "/v1/wallets/alice/policy",
+        json={"trusted_contacts": ["bob"], "auto_approve_limit_cents": 10000},
+    )
+    
     response = client.post(
         "/v1/transfers",
         json={"from": "alice", "to": "bob", "amount_cents": 5000},
         headers={"Idempotency-Key": "tx1"},
     )
     transfer_id = response.json()["id"]
+    assert response.json()["status"] == "completed"
     
     # First reversal - ok
     response = client.post(f"/v1/transfers/{transfer_id}/reverse")
@@ -170,6 +198,12 @@ def test_reversal_insufficient_funds(client):
         headers={"Idempotency-Key": "d1"},
     )
     
+    # Set policy to auto-approve
+    client.put(
+        "/v1/wallets/alice/policy",
+        json={"trusted_contacts": ["bob"], "auto_approve_limit_cents": 10000},
+    )
+    
     # Alice pays bob 5000
     response = client.post(
         "/v1/transfers",
@@ -177,6 +211,7 @@ def test_reversal_insufficient_funds(client):
         headers={"Idempotency-Key": "tx1"},
     )
     transfer_id = response.json()["id"]
+    assert response.json()["status"] == "completed"
     
     # Bob spends it all to charlie
     client.post("/v1/wallets/charlie")

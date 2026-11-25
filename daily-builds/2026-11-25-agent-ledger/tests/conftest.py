@@ -38,15 +38,16 @@ def app(db_path, clock, secret):
 
 
 @pytest.fixture
-def client(app):
+def client(app, request):
     """HTTP client for testing."""
     with TestClient(app) as c:
         yield c
-        # Check invariants after test
-        if hasattr(app.state, "invariants"):
-            checker = app.state.invariants
-            result = checker.check_all()
-            assert result["ok"], f"Invariants failed: {result['violations']}"
+        # Check invariants after test unless marked to skip
+        if not getattr(request.node, 'skip_invariants', False):
+            if hasattr(app.state, "invariants"):
+                checker = app.state.invariants
+                result = checker.check_all()
+                assert result["ok"], f"Invariants failed: {result['violations']}"
 
 
 @pytest.fixture

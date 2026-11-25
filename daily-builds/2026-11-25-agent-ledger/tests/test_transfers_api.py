@@ -72,6 +72,12 @@ def test_insufficient_funds(client):
         headers={"Idempotency-Key": "d1"},
     )
     
+    # Set policy to auto-approve so insufficient funds is checked immediately
+    client.put(
+        "/v1/wallets/alice/policy",
+        json={"trusted_contacts": ["bob"], "auto_approve_limit_cents": 5000},
+    )
+    
     response = client.post(
         "/v1/transfers",
         json={"from": "alice", "to": "bob", "amount_cents": 1000},

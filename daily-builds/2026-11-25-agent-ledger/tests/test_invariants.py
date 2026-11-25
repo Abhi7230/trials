@@ -33,8 +33,11 @@ def test_invariants_pass_after_transfers(client):
     assert response.json()["ok"] is True
 
 
-def test_corruption_detection(client, app):
+def test_corruption_detection(client, app, request):
     """Test detection of corrupted ledger."""
+    # Mark this test to skip invariant checking in teardown
+    request.node.skip_invariants = True
+    
     client.post("/v1/wallets", json={"id": "alice"})
     client.post("/v1/wallets", json={"id": "bob"})
     
@@ -68,8 +71,11 @@ def test_corruption_detection(client, app):
     assert "unbalanced_entry" in violation_types or "balance_mismatch" in violation_types
 
 
-def test_negative_balance_detection(client, app):
+def test_negative_balance_detection(client, app, request):
     """Test detection of negative balance."""
+    # Mark this test to skip invariant checking in teardown
+    request.node.skip_invariants = True
+    
     client.post("/v1/wallets", json={"id": "alice"})
     
     # Corrupt by setting negative balance
